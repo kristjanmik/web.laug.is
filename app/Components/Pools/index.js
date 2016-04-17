@@ -15,7 +15,7 @@ export default class Pools extends React.Component {
   componentWillMount() {
 
     //Use relay in the future
-    let url = 'http://graphql.laug.is/?query=%7Bpools%20%7B%0A%20%20id%2C%0A%20%20name%2C%0A%20%20today%20%7B%0A%20%20%20%20opens%0A%20%20%20%20closes%0A%20%20%7D%0A%7D%7D';
+    let url = 'https://graphql.laug.is/?query=%7Bpools%20%7B%0A%20%20id%2C%0A%20%20name%2C%0A%20%20today%20%7B%0A%20%20%20%20opens%0A%20%20%20%20closes%0A%20%20%7D%0A%7D%7D';
 
     fetch(url).then( r => r.json() ).then( (json) => {
       return json.data.pools;
