@@ -3,19 +3,56 @@
 import React from 'react';
 import styles from './Pools.css';
 import moment from 'moment';
+import haversine from 'haversine';
+
+function poolsByDistance(pools,coords){
+  if(!pools) return [];
+
+  //make a new array
+  let poolsToSort = [...pools];
+
+  poolsToSort.sort(function(a,b){
+    if(a.latitude && !b.latitude) return -1;
+    if(!a.latitude && b.latitude) return 1;
+
+    //Instead of using haversine for the distance, it would be optimal to calculate
+    //With the open google api to get actual traveling time
+    let distanceA = haversine(coords,{
+      latitude: a.latitude,
+      longitude: a.longitude
+    });
+
+    let distanceB = haversine(coords,{
+      latitude: b.latitude,
+      longitude: b.longitude
+    })
+
+    if(distanceA > distanceB) return 1;
+    if(distanceA < distanceB) return -1;
+
+    return 0;
+  });
+
+  return poolsToSort;
+}
 
 export default class Pools extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      pools: []
+      pools: [],
+      coords: null
     }
   }
   componentWillMount() {
 
-    //Use relay in the future
-    let url = 'https://graphql.laug.is/?query=%7Bpools%20%7B%0A%20%20id%2C%0A%20%20name%2C%0A%20%20today%20%7B%0A%20%20%20%20opens%0A%20%20%20%20closes%0A%20%20%7D%0A%7D%7D';
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(this.gotPosition.bind(this));
+    }
+
+    //@TODO Use relay in the future
+    let url = 'https://graphql.laug.is/?query=%7Bpools%20%7B%0A%20%20id%2C%0A%20%20name%2C%0A%20%20latitude%2C%0A%20%20longitude%2C%0A%20%20today%20%7B%0A%20%20%20%20opens%0A%20%20%20%20closes%0A%20%20%7D%0A%7D%7D';
 
     fetch(url).then( r => r.json() ).then( (json) => {
       return json.data.pools;
@@ -38,28 +75,42 @@ export default class Pools extends React.Component {
 
         if(pool.isOpen && (closes - now) <= 1800){
           pool.closesIn = closes - now;
-          console.log('what is closes - now',closes - now);
         }else if(!pool.isOpen && Math.abs(now - opens) <= 3600){
           pool.opensIn = Math.abs(now - opens);
-          console.log('what is now - opens',Math.abs(now - opens));
         }
+
         console.log(pool)
         return pool;
       });
 
       this.setState({
-        pools
-      })
+        pools: this.coords ? poolsByDistance(pools,this.state.coords) : pools
+      });
+
     }).catch( (error) => {
       console.error('Error fetching data',error);
     })
+  }
+  gotPosition(position) {
+    console.log('position is',position);
+
+    if(!position.coords) return;
+
+    let coords = {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    }
+
+    this.setState({
+      coords: coords,
+      pools: poolsByDistance(this.state.pools,coords)
+    });
   }
   render() {
 
     let list = this.state.pools.map( (pool) => {
 
       let openIndicator = (<div />);
-
 
       if(pool.isOpen){
         if(pool.closesIn >= 60){
@@ -68,7 +119,7 @@ export default class Pools extends React.Component {
           );
         }else{
           openIndicator = (
-            <div className={styles.poolStatusOpen}>Opið</div>
+            <div className={styles.poolStatusOpen}>Opin</div>
           );
         }
       }else{
@@ -78,7 +129,7 @@ export default class Pools extends React.Component {
           );
         }else{
           openIndicator = (
-            <div className={styles.poolStatusClosed}>Lokað</div>
+            <div className={styles.poolStatusClosed}>Lokuð</div>
           );
         }
       }
