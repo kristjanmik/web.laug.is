@@ -40,7 +40,7 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.(jpg|png)$/,
-      loader: 'url?limit=25000'
+      loader: 'url?limit=20000'
     },{
       test: /\.js?$/,
       exclude: /node_modules/,
