@@ -17,7 +17,8 @@
     "momentjs": "^1.1.4",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
-    "url-loader": "^0.5.7"
+    "url-loader": "^0.5.7",
+    "whatwg-fetch": "^0.11.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.0.3",
