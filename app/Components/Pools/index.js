@@ -114,8 +114,13 @@ export default class Pools extends React.Component {
       let openIndicator = (<div />);
 
       if(pool.isOpen){
+          if(pool.closesIn >= 60){
+            var poolStyle = styles.poolStatusWillClose;
+          }else{
+            var poolStyle = styles.poolStatusOpen;
+          }
           openIndicator = (
-              <div className={styles.poolStatusOpen}> <span> Opin næstu: <Countdown time={pool.today.closes}/></span></div>
+              <div className={poolStyle}> <span> Opin næstu: <Countdown time={pool.today.closes}/></span></div>
           );
       }else{
         if(pool.opensIn >= 60){

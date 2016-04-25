@@ -26,9 +26,13 @@ export default class Countdown extends React.Component {
 
   componentDidMount() {
     let self = this;
-    setInterval(function() {
+    this.interval = setInterval(function() {
       self.forceUpdate();
     }, 1000);
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.interval);
   }
 
 
