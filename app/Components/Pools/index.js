@@ -4,6 +4,7 @@ import React from 'react';
 import styles from './Pools.css';
 import moment from 'moment';
 import haversine from 'haversine';
+import Countdown from '../Countdown/countdown.js';
 
 function poolsByDistance(pools,coords){
   if(!pools) return [];
@@ -113,15 +114,14 @@ export default class Pools extends React.Component {
       let openIndicator = (<div />);
 
       if(pool.isOpen){
-        if(pool.closesIn >= 60){
+          if(pool.closesIn >= 60){
+            var poolStyle = styles.poolStatusWillClose;
+          }else{
+            var poolStyle = styles.poolStatusOpen;
+          }
           openIndicator = (
-            <div className={styles.poolStatusWillClose}>Lokar eftir &nbsp; {Math.floor(pool.closesIn / 60)} &nbsp; mínútur</div>
+              <div className={poolStyle}> <span> Opin næstu: <Countdown time={pool.today.closes}/></span></div>
           );
-        }else{
-          openIndicator = (
-            <div className={styles.poolStatusOpen}>Opin</div>
-          );
-        }
       }else{
         if(pool.opensIn >= 60){
           openIndicator = (
