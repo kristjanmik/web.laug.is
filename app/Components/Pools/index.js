@@ -37,6 +37,35 @@ function poolsByDistance(pools,coords){
   return poolsToSort;
 }
 
+function fixMultiOpeningHours(today){
+  //Check if there are multiple opening hours
+  if (today.opens.indexOf(',') >= 0 && today.closes.indexOf(',') >= 0) {
+
+    const opens = today.opens.split(',');
+    const closes = today.closes.split(',');
+    if (opens.length === closes.length) {
+
+      let now = moment().unix();
+      let openingHourFound = false;
+      for (let i = 0; i < opens.length; i++) {
+        if (moment(opens[i],'HH:mm').unix() < now && moment(closes[i],'HH:mm').unix() > now) {
+          openingHourFound = true;
+          today.opens = opens[i];
+          today.closes = closes[i];
+        }
+      }
+
+      //@TODO Instead of selecting the first period, select the closest opening hour
+      if (!openingHourFound){
+        today.opens = opens[0];
+        today.closes = closes[0];
+      }
+    }
+  }
+
+  return today;
+}
+
 export default class Pools extends React.Component {
   constructor(props) {
     super(props);
@@ -68,6 +97,10 @@ export default class Pools extends React.Component {
           console.log('Pool without today',pool);
           return pool
         };
+
+        //fixing pools that have today.opens:'06:30,15:00' and today.closes:'08:00,21:00'
+        //it ignores other values
+        pool.today = fixMultiOpeningHours(pool.today);
 
         let opens = moment(pool.today.opens,'HH:mm').unix();
         let closes = moment(pool.today.closes,'HH:mm').unix();
