@@ -14,10 +14,17 @@
   "dependencies": {
     "babel-cli": "^6.4.0",
     "file-loader": "^0.8.5",
-    "moment": "^2.13.0",
     "haversine": "^1.0.0",
+    "moment": "^2.13.0",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.5.2",
+    "react-router-redux": "^4.0.5",
+    "redux": "^3.5.2",
+    "redux-logger": "^2.6.1",
+    "redux-react-local": "^1.4.0",
+    "redux-thunk": "^2.1.0",
     "url-loader": "^0.5.7",
     "whatwg-fetch": "^0.11.0"
   },

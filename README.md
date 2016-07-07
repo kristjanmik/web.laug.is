@@ -7,4 +7,4 @@ The React template is based on [the ultimate Webpack setup](http://www.christian
 
 1. npm install
 2. npm start
-3. navigate to http://localhost:3000 in your browser of choice.
+3. navigate to http://localhost:3700 in your browser of choice.
