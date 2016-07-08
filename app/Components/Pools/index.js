@@ -6,6 +6,9 @@ import moment from 'moment';
 import haversine from 'haversine';
 import Countdown from '../Countdown/countdown.js';
 
+import { Link } from 'react-router'
+
+
 function poolsByDistance(pools,coords){
   if(!pools) return [];
 
@@ -113,7 +116,6 @@ export default class Pools extends React.Component {
           pool.opensIn = Math.abs(now - opens);
         }
 
-        console.log(pool)
         return pool;
       });
 
@@ -166,17 +168,16 @@ export default class Pools extends React.Component {
           );
         }
       }
-
       return (
         <div key={pool.id} className={styles.poolContainer}>
-          <div className={styles.pool} >
+          <Link to={`/pool/${pool.id.toLowerCase()}`} className={styles.pool}>
             <img src={require(`../../img/${pool.id.toLowerCase()}.png`)} className={styles.poolImage}/>
             {/*<img src={require('../../img/arb.png')} className={styles.poolImage}/>*/}
             <div className={styles.poolName}>{pool.name}</div>
             <div className={styles.poolStatusContainer}>
               {openIndicator}
             </div>
-          </div>
+          </Link>
         </div>
       )
     });

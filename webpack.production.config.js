@@ -34,19 +34,20 @@ module.exports = {
       modules: false
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+      'process.env.NODE_ENV': JSON.stringify('production')
     })
   ],
   module: {
     loaders: [{
       test: /\.(jpg|png)$/,
-      loader: 'url?limit=20000'
+      loader: 'url?limit=25000'
     },{
       test: /\.js?$/,
       exclude: /node_modules/,
       loader: 'babel',
       query: {
-        "presets": ["es2015", "stage-0", "react"]
+        "presets": ["es2015", "stage-0", "react"],
+        "plugins": ["transform-decorators-legacy"]
       }
     }, {
       test: /\.json?$/,
