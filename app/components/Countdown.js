@@ -16,8 +16,6 @@ function getTimeRemaining(endtime){
   };
 }
 
-
-
 export default class Countdown extends React.Component {
   constructor(props) {
     super(props);
