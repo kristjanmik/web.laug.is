@@ -59,7 +59,9 @@ export default class Pool extends React.Component {
 
     return (
       <div key={key} className={s.poolContainer}>
-        <Link to={`/pool/${id.toLowerCase()}`} className={s.pool}>
+        {/*@TODO update SinglePool before enabling this*/}
+        {/*<Link to={`/pool/${id.toLowerCase()}`} className={s.pool}>*/}
+        <Link to={`/`} className={s.pool}>
           <img src={require(`../../img/${id.toLowerCase()}.png`)} className={s.poolImage}/>
           {/*<img src={require('../../img/arb.png')} className={s.poolImage}/>*/}
           <div className={s.poolName}>{name}</div>
